@@ -2,7 +2,7 @@ import sys
 import importlib
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLineEdit, QListWidget, QPushButton, \
-    QCheckBox
+    QCheckBox, QHBoxLayout
 import logging
 
 
@@ -14,11 +14,16 @@ class ModuleWidget(QWidget):
     def initUI(self):
         layout = QVBoxLayout()
 
-        # Search bar
+        # Horizontal layout for search bar and refresh button
+        search_layout = QHBoxLayout()
         self.search_bar = QLineEdit()
         self.search_bar.setPlaceholderText("Search Modules")
         self.search_bar.textChanged.connect(self.filter_modules)
-        layout.addWidget(self.search_bar)
+        search_layout.addWidget(self.search_bar)
+        self.refresh_button = QPushButton("Refresh")
+        self.refresh_button.clicked.connect(self.populate_module_list)
+        search_layout.addWidget(self.refresh_button)
+        layout.addLayout(search_layout)
 
         # Checkbox to show/hide submodules
         self.show_submodules_checkbox = QCheckBox("Show Submodules")
@@ -29,27 +34,28 @@ class ModuleWidget(QWidget):
         self.module_list = QListWidget()
         layout.addWidget(self.module_list)
 
-        # Reload button
+        # Button layout for Reload and Remove buttons
+        button_layout = QHBoxLayout()
         self.reload_button = QPushButton("Reload Module")
         self.reload_button.clicked.connect(self.reload_module)
-        layout.addWidget(self.reload_button)
-
-        # Remove button
+        button_layout.addWidget(self.reload_button)
         self.remove_button = QPushButton("Remove Module")
         self.remove_button.clicked.connect(self.remove_module)
-        layout.addWidget(self.remove_button)
+        button_layout.addWidget(self.remove_button)
+        layout.addLayout(button_layout)
 
         self.setLayout(layout)
 
-        # Populate the module list
         self.populate_module_list()
 
-        self.filter_modules()
-
     def populate_module_list(self):
+        self.module_list.clear()
         modules = [name for name, _ in list(sys.modules.items()) if name is not None]
         modules.sort()
         self.module_list.addItems(modules)
+
+        self.filter_modules()
+
 
     def filter_modules(self):
         text = self.search_bar.text().lower()
@@ -61,11 +67,8 @@ class ModuleWidget(QWidget):
             module_name_lower = module_name.lower()
 
             if not show_submodules and '.' in module_name:
-                # If submodules should be hidden and the module contains a dot (indicating a submodule),
-                # hide it.
                 item.setHidden(True)
             elif text in module_name_lower or (show_submodules and any(module_name_lower.startswith(prefix) for prefix in text.split('.'))):
-                # If the checkbox is checked or the text matches, show the module.
                 item.setHidden(False)
             else:
                 item.setHidden(True)
@@ -87,7 +90,7 @@ class ModuleWidget(QWidget):
             if module_name in sys.modules:
                 del sys.modules[module_name]
             else:
-                logging.warning(f"tried to remove an already removed module '(module_name)'")
+                logging.warning(f"Tried to remove an already removed module {module_name}")
 
 
 if __name__ == '__main__':
