@@ -3,6 +3,7 @@ import importlib
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLineEdit, QListWidget, QPushButton, \
     QCheckBox
+import logging
 
 
 class ModuleWidget(QWidget):
@@ -33,6 +34,11 @@ class ModuleWidget(QWidget):
         self.reload_button.clicked.connect(self.reload_module)
         layout.addWidget(self.reload_button)
 
+        # Remove button
+        self.remove_button = QPushButton("Remove Module")
+        self.remove_button.clicked.connect(self.remove_module)
+        layout.addWidget(self.remove_button)
+
         self.setLayout(layout)
 
         # Populate the module list
@@ -58,8 +64,7 @@ class ModuleWidget(QWidget):
                 # If submodules should be hidden and the module contains a dot (indicating a submodule),
                 # hide it.
                 item.setHidden(True)
-            elif text in module_name_lower or (
-                    show_submodules and any(module_name_lower.startswith(prefix) for prefix in text.split('.'))):
+            elif text in module_name_lower or (show_submodules and any(module_name_lower.startswith(prefix) for prefix in text.split('.'))):
                 # If the checkbox is checked or the text matches, show the module.
                 item.setHidden(False)
             else:
@@ -72,9 +77,19 @@ class ModuleWidget(QWidget):
             try:
                 importlib.reload(sys.modules[module_name])
             except Exception as e:
-                print(f"Failed to reload module {module_name}: {e}")
+                logging.error(f"Failed to reload module {module_name}: {e}")
             else:
                 print(f"Module {module_name} reloaded successfully")
+
+    def remove_module(self):
+        selected_items = self.module_list.selectedItems()
+        for item in selected_items:
+            module_name = item.text()
+            self.module_list.takeItem(self.module_list.row(item))
+            if module_name in sys.modules:
+                del sys.modules[module_name]
+            else:
+                logging.warning(f"tried to remove an already removed module '(module_name)'")
 
 
 if __name__ == '__main__':
@@ -85,7 +100,7 @@ if __name__ == '__main__':
     module_widget = ModuleWidget()
     window.setCentralWidget(module_widget)
     window.resize(600, 400)
-    window.setWindowTitle("Python Module Reloader")
+    window.setWindowTitle("Python Module Manager")
     window.show()
 
     if not app_inst:
