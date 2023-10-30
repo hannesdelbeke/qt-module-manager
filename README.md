@@ -1,4 +1,5 @@
-# qt-module-manager
+# qt-module-manager [![PyPI](https://img.shields.io/pypi/v/qt-module-manager)](https://pypi.org/project/qt-module-manager/) 
+
 A Qt widget to inspect all imported modules, and reload them. ⚡Speed up your development 🚀
 
 ## Features
