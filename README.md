@@ -1,6 +1,7 @@
 # qt-module-manager [![PyPI](https://img.shields.io/pypi/v/qt-module-manager)](https://pypi.org/project/qt-module-manager/) 
 
-A Qt widget to inspect all imported Python modules (not to confuse with Maya modules), and reload or unload them. ⚡Speed up your development 🚀
+A Qt widget to inspect all imported Python modules (not to confuse with Maya modules), and reload or unload them.  
+⚡Speed up your development 🚀
 
 ## Features
 - filter submodules to only display base modules, e.g. show `PySide2`, but hide `PySide2.QtWidgets`
