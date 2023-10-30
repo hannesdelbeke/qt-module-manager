@@ -71,8 +71,7 @@ class ModuleWidget(QWidget):
                 item.setHidden(True)
 
     def reload_module(self):
-        selected_item = self.module_list.currentItem()
-        if selected_item:
+        for selected_item in self.module_list.selectedItems():
             module_name = selected_item.text()
             try:
                 importlib.reload(sys.modules[module_name])
@@ -82,8 +81,7 @@ class ModuleWidget(QWidget):
                 print(f"Module {module_name} reloaded successfully")
 
     def remove_module(self):
-        selected_items = self.module_list.selectedItems()
-        for item in selected_items:
+        for item in self.module_list.selectedItems():
             module_name = item.text()
             self.module_list.takeItem(self.module_list.row(item))
             if module_name in sys.modules:
