@@ -36,9 +36,11 @@ class ModuleWidget(QWidget):
 
         # Button layout for Reload and Remove buttons
         button_layout = QHBoxLayout()
+
         self.reload_button = QPushButton("Reload Module")
         self.reload_button.clicked.connect(self.reload_module)
         button_layout.addWidget(self.reload_button)
+
         self.remove_button = QPushButton("Remove Module")
         self.remove_button.clicked.connect(self.remove_module)
         button_layout.addWidget(self.remove_button)
@@ -93,7 +95,7 @@ class ModuleWidget(QWidget):
                 logging.warning(f"Tried to remove an already removed module {module_name}")
 
 
-if __name__ == '__main__':
+def show():
     app_inst = QApplication.instance()
     app = app_inst or QApplication(sys.argv)
 
@@ -106,3 +108,9 @@ if __name__ == '__main__':
 
     if not app_inst:
         app.exec_()
+
+    return window
+
+
+if __name__ == '__main__':
+    show()
