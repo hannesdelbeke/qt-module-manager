@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+#build-backend = "setuptools.build_meta"
+
+
+[tool.setuptools]
+packages = ["qt_module_manager"]
+
+
+[project]
+name = "qt-module-manager"
+authors = [
+    {name = "Hannes Delbeke"},
+]
+description = "A Qt module manager to view and reload the imported Python modules"
+readme = "README.md"
+requires-python = ">=3.4"
+keywords = ["module", "imported", "reload", "qt", "pyside", "widget", "manager"]
+license = { file = "LICENSE" }
+classifiers = [
+    "Programming Language :: Python :: 3.7",
+]
+#dynamic = ["dependencies"]
+dependencies = ['importlib-metadata; python_version<"3.7"', "qtpy"]
+#dynamic = ["version"]
+version = "0.0.1"
+
+#[project.optional-dependencies]
+#yaml = ["pyyaml"]
+
+#[project.scripts]
+#my-script = "my_package.module:function"
+
+[project.urls]
+Source = "https://github.com/hannesdelbeke/qt-module-manager"
