@@ -3,6 +3,11 @@
 A Qt widget to inspect all imported Python modules (not to confuse with Maya modules), and reload or unload them.  
 ⚡Speed up your development 🚀
 
+```python
+import qt_module_manager
+w = qt_module_manager.show()
+```
+
 ## Features
 - filter submodules to only display base modules, e.g. show `PySide2`, but hide `PySide2.QtWidgets`
 - filter by name to search for a module, e.g. `numpy`
